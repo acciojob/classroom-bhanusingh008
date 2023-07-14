@@ -80,11 +80,14 @@ public class StudentRepository {
     }
 
     public void deleteTeacherByName(String name) {
+        int idx = 0;
         for(int key : teacherDB.keySet()){
             if(teacherDB.get(key).getName().equals(name)){
-                teacherDB.remove(key);
+                idx = key;
             }
         }
+
+        teacherDB.remove(idx);
     }
 
     public void deleteAllTeachers() {
