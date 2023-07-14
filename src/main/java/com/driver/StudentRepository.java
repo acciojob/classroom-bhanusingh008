@@ -43,7 +43,7 @@ public class StudentRepository {
         try{
             return teacherDB.get(name);
         }catch (Exception e){
-            throw new RuntimeException("Teacher Does Not Exist.");
+            return null;
         }
     }
 
@@ -51,13 +51,14 @@ public class StudentRepository {
         try{
             return studentTeacherDB.get(teacher);
         }catch (Exception e){
-            throw new RuntimeException("Teacher does not exist.");
+            return null;
         }
     }
 
     public void deleteTeacherByName(String name) {
         try{
             teacherDB.remove(name);
+            studentTeacherDB.remove(name);
         }catch (Exception e){
             throw new RuntimeException("Teacher Not Added Before.");
         }
