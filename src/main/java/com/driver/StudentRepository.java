@@ -8,89 +8,70 @@ import java.util.List;
 
 @Repository
 public class StudentRepository {
-    HashMap<Integer, Student> studentDB = new HashMap<>();
-    HashMap<Integer, Teacher> teacherDB = new HashMap<>();
+    HashMap<String, Student> studentDB = new HashMap<>();
+    HashMap<String, Teacher> teacherDB = new HashMap<>();
 
-    HashMap<Student, Teacher> studentTeacherDB =new HashMap<>();
+    HashMap<String, List<String>> studentTeacherDB =new HashMap<>();
 
     public void addStudentTeacherPair(String student, String teacher) {
-
-        Student student1 = null;
-        Teacher teacher1 = null;
-
-        for(int key : studentDB.keySet()){
-            if(student.equals(studentDB.get(key).getName())){
-                student1 = studentDB.get(key);
-            }
+        if(!studentTeacherDB.containsKey(teacher)){
+            studentTeacherDB.put(teacher, new ArrayList<>());
         }
-
-        for(int key : teacherDB.keySet()){
-            if(teacher.equals(teacherDB.get(key).getName())){
-                teacher1 = teacherDB.get(key);
-            }
-        }
-
-        if(student1==null || teacher1==null){
-            throw new RuntimeException("Student or Teacher not added.");
-        }
-
-        studentTeacherDB.put(student1, teacher1);
-
+        List<String> curr = studentTeacherDB.get(teacher);
+        curr.add(student);
+        studentTeacherDB.put(teacher, curr);
     }
 
-    public Student getStudentByName(String student) {
-        for(int key : studentDB.keySet()){
-            if(student.equals(studentDB.get(key).getName())){
-                return studentDB.get(key);
-            }
+    public Student getStudentByName(String student){
+        try{
+            return studentDB.get(student);
+        }catch (Exception e){
+            throw new RuntimeException("Student Does Not Exist.");
         }
-        return null;
     }
 
     public List<String> getAllStudent() {
         List<String> ans = new ArrayList<>();
 
-        for(int key : studentDB.keySet()){
-           ans.add(studentDB.get(key).getName());
+        for(String key : studentDB.keySet()){
+           ans.add(key);
         }
         return ans;
     }
 
     public Teacher getTeacherByName(String name) {
-        for(int key : teacherDB.keySet()){
-            if(teacherDB.get(key).getName().equals(name)){
-                return teacherDB.get(key);
-            }
+        try{
+            return teacherDB.get(name);
+        }catch (Exception e){
+            throw new RuntimeException("Teacher Does Not Exist.");
         }
-        return null;
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
-        List<String> ans =new ArrayList<>();
-
-        for(Student key : studentTeacherDB.keySet()){
-            Teacher teacher1 = studentTeacherDB.get(key);
-
-            if(teacher1.getName().equals(teacher)){
-                ans.add(key.getName());
-            }
+        try{
+            return studentTeacherDB.get(teacher);
+        }catch (Exception e){
+            throw new RuntimeException("Teacher does not exist.");
         }
-
-        return ans;
     }
 
     public void deleteTeacherByName(String name) {
-        int idx = 0;
-        for(int key : teacherDB.keySet()){
-            if(teacherDB.get(key).getName().equals(name)){
-                idx = key;
-            }
+        try{
+            teacherDB.remove(name);
+        }catch (Exception e){
+            throw new RuntimeException("Teacher Not Added Before.");
         }
-
-        teacherDB.remove(idx);
     }
 
     public void deleteAllTeachers() {
         teacherDB.clear();
+    }
+
+    public void addStudent(Student student) {
+        studentDB.put(student.getName(), student);
+    }
+
+    public void addTeacher(Teacher teacher) {
+        teacherDB.put(teacher.getName(), teacher);
     }
 }

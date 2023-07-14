@@ -10,16 +10,12 @@ public class StudentService {
 
     @Autowired
     StudentRepository studentRepository;
-    static int studentIdx = -1;
-    static int teacherIdx = -1;
     public void addStudent(Student student) {
-        studentIdx++;
-        studentRepository.studentDB.put(studentIdx, student);
+        studentRepository.addStudent(student);
     }
 
     public void addTeacher(Teacher teacher) {
-        teacherIdx++;
-        studentRepository.teacherDB.put(teacherIdx, teacher);
+        studentRepository.addTeacher(teacher);
     }
 
 
